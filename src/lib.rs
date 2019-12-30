@@ -1,3 +1,53 @@
+//! A platform agnostic driver to interface with the ADXL355 Accelerometer.
+//! This driver uses SPI via [embedded-hal] and implements the [`Accelerometer` trait][trait]
+//! from the `accelerometer` crate.
+//!
+//! [embedded-hal]: https://docs.rs/embedded-hal
+//! [trait]: https://docs.rs/accelerometer/latest/accelerometer/trait.Accelerometer.html
+//!
+//!
+//! # Usage
+//!
+//! Use embedded-hal implementation to get SPI and a GPIO OutputPin for the chip select,
+//! then create the accelerometer handle
+//!
+//! ```
+//!
+//! use adxl355::{Adxl355, Config as ADXLConfig, ODR_LPF, Range, Accelerometer};
+//!
+//! // to create sensor with default configuration:
+//! let mut accelerometer = Adxl355::default(spi, cs)?;
+//!
+//! // start measurements
+//! accelerometer.start();
+//!
+//! // to get 3d accerlation data:
+//! let accel = accelerometer.acceleration()?;
+//! println!("{:?}", accel);
+//!
+//! // One can also use conf module to supply configuration:
+//!
+//! let mut accelerometer =
+//!     Adxl355::new(spi, cs,
+//!                     ADXLConfig::new()
+//!                     .odr(ODR_LPF::ODR_31_25_Hz)
+//!                     .range(Range::_2G))?;
+//! ```
+//!
+//! # References
+//!
+//! - [Register Map][1]
+//!
+//! [1]: https://www.analog.com/media/en/technical-documentation/data-sheets/adxl354_355.pdf
+//!
+//! - [`embedded-hal`][2]
+//!
+//! [2]: https://github.com/rust-embedded/embedded-hal
+//!
+//!
+
+
+
 #![no_std]
 
 mod conf;
@@ -46,6 +96,7 @@ where
         Adxl355::new(spi, cs, &Config::new())
     }
 
+    /// Takes a config object to initialize the adxl355 driver
     pub fn new(spi:SPI, cs:CS, config: &Config) -> Result<Self, E> {
         let mut adxl355 = Adxl355 {
             spi,
@@ -69,11 +120,13 @@ where
         Ok(adxl355)
     }
 
+    /// Puts the device in `Measurement mode`. The defaut after power up is `Standby mode`.
     pub fn start(&mut self) {
         self.write_reg(Register::POWER_CTL.addr(), 0);
     }
 
 
+    /// Returns the contents of the temperature registers
     pub fn read_temp(&mut self) -> u16 {
 
         let mut bytes = [(Register::TEMP2.addr() << 1)  | SPI_READ, 0, 0];
@@ -123,6 +176,8 @@ where
 {
     type Error = Error<E>;
 
+    /// Gets acceleration vector reading from the accelerometer
+    /// Returns a 3D vector with x,y,z, fields in a Result
     fn acceleration(&mut self) -> Result<I32x3, Error<E>> {
         let mut bytes = [0u8; 9+1];
         bytes[0] = (Register::XDATA3.addr() << 1)  | SPI_READ;
