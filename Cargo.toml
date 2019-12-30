@@ -13,5 +13,6 @@ version = "0.1.0"
 
 [dependencies]
 embedded-hal = "0.2.3"
+accelerometer = "0.10.0"
 micromath = {version="1.0.0", features=["vector"]}
 

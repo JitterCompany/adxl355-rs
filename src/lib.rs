@@ -3,15 +3,18 @@
 mod conf;
 mod register;
 
+use core::fmt::Debug;
+
 use embedded_hal as hal;
-use micromath::vector::I32x3;
 
 use hal::blocking::spi;
 use hal::digital::v2::OutputPin;
 
-pub use conf::*;
+pub use accelerometer::{Accelerometer, Error, I32x3};
 
+pub use conf::*;
 use register::Register;
+
 
 const SPI_READ: u8 = 0x01;
 const SPI_WRITE: u8 = 0x00;
@@ -80,20 +83,6 @@ where
         temp_h | temp_l
     }
 
-    pub fn acceleration(&mut self) -> I32x3 {
-        let mut bytes = [0u8; 9+1];
-        bytes[0] = (Register::XDATA3.addr() << 1)  | SPI_READ;
-        self.read(&mut bytes);
-
-        // combine 3 bytes into one i32 value
-        // right-shift with sign-extend to 20-bit
-        let x = ((((bytes[1] as i32) << 24) | ((bytes[2] as i32) << 16) | ((bytes[3] & 0xF0) as i32) << 8)) >> 12;
-        let y = ((((bytes[4] as i32) << 24) | ((bytes[5] as i32) << 16) | ((bytes[6] & 0xF0) as i32) << 8)) >> 12;
-        let z = ((((bytes[7] as i32) << 24) | ((bytes[8] as i32) << 16) | ((bytes[9] & 0xF0) as i32) << 8)) >> 12;
-
-        I32x3::new(x, y, z)
-    }
-
     /// Get the device ID
     pub fn get_device_id(&mut self) -> u8 {
         let reg = Register::DEVID.addr();
@@ -124,12 +113,26 @@ where
     }
 }
 
+impl<SPI, CS, E> Accelerometer<I32x3> for Adxl355<SPI, CS>
+where
+    SPI: spi::Transfer<u8, Error=E> + spi::Write<u8, Error=E>,
+    CS: OutputPin<Error = ()>,
+    E: Debug
+{
+    type Error = Error<E>;
 
+    fn acceleration(&mut self) -> Result<I32x3, Error<E>> {
+        let mut bytes = [0u8; 9+1];
+        bytes[0] = (Register::XDATA3.addr() << 1)  | SPI_READ;
+        self.read(&mut bytes);
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
+        // combine 3 bytes into one i32 value
+        // right-shift with sign-extend to 20-bit
+        let x = ((((bytes[1] as i32) << 24) | ((bytes[2] as i32) << 16) | ((bytes[3] & 0xF0) as i32) << 8)) >> 12;
+        let y = ((((bytes[4] as i32) << 24) | ((bytes[5] as i32) << 16) | ((bytes[6] & 0xF0) as i32) << 8)) >> 12;
+        let z = ((((bytes[7] as i32) << 24) | ((bytes[8] as i32) << 16) | ((bytes[9] & 0xF0) as i32) << 8)) >> 12;
+
+        Ok(I32x3::new(x, y, z))
     }
+
 }
