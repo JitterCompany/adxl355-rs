@@ -1,0 +1,15 @@
+[package]
+name = "adxl355"
+edition = "2018"
+authors = ["Jitter"]
+description = "A platform agnostic driver to interface with the ADXL355 through SPI(accelerometer)"
+documentation = "https://docs.rs/adxl355"
+keywords = ["embedded-hal-driver", "accelerometer", "MEMS"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/JitterCompany/adxl355-rs"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+embedded-hal = "0.2.3"
