@@ -28,6 +28,7 @@ pub struct Adxl355<SPI, CS> {
 
     // configuration
     odr: ODR_LPF,
+    hpf: HPF_CORNER,
     range: Range
 }
 
@@ -49,7 +50,8 @@ where
         let mut adxl355 = Adxl355 {
             spi,
             cs,
-            odr: config.filter.unwrap_or_default(),
+            odr: config.odr.unwrap_or_default(),
+            hpf: config.hpf.unwrap_or_default(),
             range: config.range.unwrap_or_default()
         };
 
@@ -61,7 +63,7 @@ where
 
         }
 
-        adxl355.write_reg(Register::FILTER.addr(), adxl355.odr.val());
+        adxl355.write_reg(Register::FILTER.addr(), (adxl355.hpf.val() << 4) | adxl355.odr.val());
         adxl355.write_reg(Register::RANGE.addr(), adxl355.range.val());
 
         Ok(adxl355)

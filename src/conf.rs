@@ -46,9 +46,33 @@ impl Default for ODR_LPF {
     }
 }
 
+#[derive(Copy, Clone, Debug)]
+pub enum HPF_CORNER {
+    NONE        = 0,
+    _247_ODR    = 1,
+    _62_084_ODR = 2,
+    _15_545_ODR = 3,
+    _3_862_ODR  = 4,
+    _0_954_ODR  = 5,
+    _0_238_ODR  = 6
+}
+
+impl HPF_CORNER {
+    pub fn val(self) -> u8 {
+        self as u8
+    }
+}
+
+impl Default for HPF_CORNER {
+    fn default() -> Self {
+        HPF_CORNER::NONE
+    }
+}
+
 pub struct Config {
     pub(crate) range: Option<Range>,
-    pub(crate) filter: Option<ODR_LPF>,
+    pub(crate) odr: Option<ODR_LPF>,
+    pub(crate) hpf: Option<HPF_CORNER>
 }
 
 impl Config {
@@ -56,7 +80,8 @@ impl Config {
     pub fn new() -> Self {
         Config {
             range: None,
-            filter: None,
+            odr: None,
+            hpf: None
         }
     }
 
@@ -65,8 +90,13 @@ impl Config {
         self
     }
 
-    pub fn filter(&mut self, filter: ODR_LPF) -> &mut Self {
-        self.filter = Some(filter);
+    pub fn odr(&mut self, odr: ODR_LPF) -> &mut Self {
+        self.odr = Some(odr);
+        self
+    }
+
+    pub fn hpf(&mut self, hpf: HPF_CORNER) -> &mut Self {
+        self.hpf = Some(hpf);
         self
     }
 }
