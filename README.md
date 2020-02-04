@@ -43,6 +43,18 @@ Adxl355::new(spi, cs,
 
 Example based on the stm32g070 microcontroller [`examples/stm32g070.rs`]
 
+To build an example
+
 ```bash
 cargo build --example stm32g070 --features=stm32g070 --target thumbv6m-none-eabi
 ```
+
+The resulting ELF file can be found under `target/thumbv6m-none-eabi/examples/`.
+
+To run immediately
+
+```bash
+cargo run --example stm32g070 --features=stm32g070 --target thumbv6m-none-eabi
+```
+
+This will make use of `flash.sh` that assumes the [st-link utilities](https://github.com/texane/stlink) are available in your PATH.
