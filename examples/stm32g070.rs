@@ -12,7 +12,7 @@
 //! mosi = PB5;
 //! cs = PB0
 //!
-//! UART
+//! USART2 @ 1000000 Baud
 //! ====
 //! Tx = PA2
 //!
@@ -77,7 +77,7 @@ fn main() -> ! {
         &mut rcc);
 
     let mut cfg = ADXLConfig::new();
-    cfg.odr(ODR_LPF::ODR_1000_Hz)
+    cfg.odr(ODR_LPF::ODR_3_906_Hz)
        .range(Range::_4G);
 
     let mut accelerometer = Adxl355::new(spi, cs, &cfg).unwrap();
