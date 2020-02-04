@@ -38,3 +38,11 @@ Adxl355::new(spi, cs,
                      .odr(ODR_LPF::ODR_31_25_Hz)
                      .range(Range::_2G))?;
 ```
+
+## Running the examples
+
+Example based on the stm32g070 microcontroller [`examples/stm32g070.rs`]
+
+```bash
+cargo build --example stm32g070 --features=stm32g070 --target thumbv6m-none-eabi
+```

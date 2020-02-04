@@ -8,9 +8,31 @@ keywords = ["embedded-hal-driver", "accelerometer", "MEMS"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/JitterCompany/adxl355-rs"
 version = "0.1.0"
+readme = "README.md"
+build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 embedded-hal = "0.2.3"
 accelerometer = "0.10.0"
+
+
+[dev-dependencies]
+cortex-m = "0.6.2"
+cortex-m-rt = "0.6.12"
+panic-halt = "0.2.0"
+nb = "0.1.2"
+
+
+[dev-dependencies.stm32g0xx-hal]
+features = ["stm32g07x", "rt"]
+git = "https://github.com/stm32-rs/stm32g0xx-hal.git"
+
+[[example]]
+name = "stm32g070"
+required-features = ["stm32g070"]
+required-target = "thumbv6m-none-eabi"
+
+[features]
+stm32g070 = []
