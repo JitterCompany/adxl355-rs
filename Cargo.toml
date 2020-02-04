@@ -27,6 +27,7 @@ nb = "0.1.2"
 [dev-dependencies.stm32g0xx-hal]
 features = ["stm32g07x", "rt"]
 git = "https://github.com/stm32-rs/stm32g0xx-hal.git"
+rev = "3d190f799af1"
 
 [[example]]
 name = "stm32g070"
