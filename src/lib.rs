@@ -60,7 +60,7 @@ use embedded_hal as hal;
 use hal::blocking::spi;
 use hal::digital::v2::OutputPin;
 
-pub use accelerometer::{Accelerometer, RawAccelerometer, error, Error, vector::I32x3};
+pub use accelerometer::{Accelerometer, RawAccelerometer, error, Error, vector::{I32x3, F32x3}};
 
 pub use conf::*;
 use register::Register;
@@ -70,6 +70,8 @@ const SPI_READ: u8 = 0x01;
 const SPI_WRITE: u8 = 0x00;
 
 const EXPECTED_DEVICE_ID: u8 = 0xED;
+
+const ACCEL_MAX_I20: u32 = 524_287; // = 2^(20-1)-1
 
 /// ADXL355 driver
 pub struct Adxl355<SPI, CS> {
@@ -126,8 +128,8 @@ where
     }
 
 
-    /// Returns the contents of the temperature registers
-    pub fn read_temp(&mut self) -> u16 {
+    /// Returns the raw contents of the temperature registers
+    pub fn read_temp_raw(&mut self) -> u16 {
 
         let mut bytes = [(Register::TEMP2.addr() << 1)  | SPI_READ, 0, 0];
         self.read(&mut bytes);
@@ -192,4 +194,28 @@ where
         Ok(I32x3::new(x, y, z))
     }
 
+}
+
+impl<SPI, CS, E> Accelerometer for Adxl355<SPI, CS>
+where
+    SPI: spi::Transfer<u8, Error=E> + spi::Write<u8, Error=E>,
+    CS: OutputPin<Error = ()>,
+    E: Debug
+{
+    type Error = E;
+
+    fn sample_rate(&mut self) -> Result<f32, Error<Self::Error>> {
+        Ok(self.odr.into())
+    }
+
+    fn accel_norm(&mut self) -> Result<F32x3, Error<Self::Error>> {
+        let raw_data: I32x3 = self.accel_raw()?;
+        let range: f32 = self.range.into(); // range in [g], so 2, 4 or 8
+
+        let x = (raw_data.x as f32 / ACCEL_MAX_I20 as f32) * range;
+        let y = (raw_data.y as f32 / ACCEL_MAX_I20 as f32) * range;
+        let z = (raw_data.z as f32 / ACCEL_MAX_I20 as f32) * range;
+
+        Ok(F32x3::new(x, y, z))
+    }
 }

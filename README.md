@@ -58,3 +58,10 @@ cargo run --example stm32g070 --features=stm32g070 --target thumbv6m-none-eabi
 ```
 
 This will make use of `flash.sh` that assumes the [st-link utilities](https://github.com/texane/stlink) are available in your PATH.
+
+
+Example with normalized data
+
+```bash
+cargo run --example norm_stm32g070 --features=stm32g070 --target thumbv6m-none-eabi
+```

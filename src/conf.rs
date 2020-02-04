@@ -13,6 +13,16 @@ impl Range {
     }
 }
 
+impl From<Range> for f32 {
+    fn from(range: Range) -> f32 {
+        match range {
+            Range::_2G => 2.0,
+            Range::_4G => 4.0,
+            Range::_8G => 8.0,
+        }
+    }
+}
+
 impl Default for Range {
     fn default() -> Self {
         Range::_2G
@@ -49,6 +59,24 @@ pub enum ODR_LPF {
 impl ODR_LPF {
     pub fn val(self) -> u8 {
         self as u8
+    }
+}
+
+impl From<ODR_LPF> for f32 {
+    fn from(rate: ODR_LPF) -> f32 {
+        match rate {
+            ODR_LPF::ODR_4000_Hz => 4000.0,
+            ODR_LPF::ODR_2000_Hz => 2000.0,
+            ODR_LPF::ODR_1000_Hz => 1000.0,
+            ODR_LPF::ODR_500_Hz => 500.0,
+            ODR_LPF::ODR_250_Hz => 250.0,
+            ODR_LPF::ODR_125_Hz => 125.0,
+            ODR_LPF::ODR_62_5_Hz => 62.5,
+            ODR_LPF::ODR_31_25_Hz => 31.25,
+            ODR_LPF::ODR_15_625_Hz => 15.625,
+            ODR_LPF::ODR_7_813_Hz => 7.813,
+            ODR_LPF::ODR_3_906_Hz => 3.906,
+        }
     }
 }
 
