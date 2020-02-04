@@ -1,7 +1,6 @@
 [target.thumbv6m-none-eabi]
-runner = "./flash.sh"
+runner = "./flash.sh 0x08000000"
 rustflags = [
-  "-C", "linker=arm-none-eabi-ld",
   "-C", "link-arg=-Tlink.x"
 ]
 

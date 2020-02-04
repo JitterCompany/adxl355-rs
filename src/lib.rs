@@ -60,7 +60,7 @@ use embedded_hal as hal;
 use hal::blocking::spi;
 use hal::digital::v2::OutputPin;
 
-pub use accelerometer::{Accelerometer, Error, I32x3};
+pub use accelerometer::{Accelerometer, RawAccelerometer, error, Error, vector::I32x3};
 
 pub use conf::*;
 use register::Register;
@@ -168,17 +168,17 @@ where
     }
 }
 
-impl<SPI, CS, E> Accelerometer<I32x3> for Adxl355<SPI, CS>
+impl<SPI, CS, E> RawAccelerometer<I32x3> for Adxl355<SPI, CS>
 where
     SPI: spi::Transfer<u8, Error=E> + spi::Write<u8, Error=E>,
     CS: OutputPin<Error = ()>,
     E: Debug
 {
-    type Error = Error<E>;
+    type Error = E;
 
     /// Gets acceleration vector reading from the accelerometer
     /// Returns a 3D vector with x,y,z, fields in a Result
-    fn acceleration(&mut self) -> Result<I32x3, Error<E>> {
+    fn accel_raw(&mut self) -> Result<I32x3, Error<E>> {
         let mut bytes = [0u8; 9+1];
         bytes[0] = (Register::XDATA3.addr() << 1)  | SPI_READ;
         self.read(&mut bytes);

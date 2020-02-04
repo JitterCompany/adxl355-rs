@@ -40,7 +40,7 @@ use stm32g0xx_hal::{
 };
 
 
-use adxl355::{Adxl355, Config as ADXLConfig, ODR_LPF, Range, Accelerometer};
+use adxl355::{Adxl355, Config as ADXLConfig, ODR_LPF, Range, RawAccelerometer};
 
 #[entry]
 fn main() -> ! {
@@ -102,7 +102,7 @@ fn main() -> ! {
             led.set_high().unwrap();
             exti.unpend(Event::GPIO0);
 
-            let accel = accelerometer.acceleration().unwrap();
+            let accel = accelerometer.accel_raw().unwrap();
 
             writeln!(usart, "{},{},{}", accel.x, accel.y, accel.z).unwrap();
             led.set_low().unwrap();
