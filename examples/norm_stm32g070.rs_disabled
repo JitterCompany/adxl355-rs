@@ -12,6 +12,8 @@
 //! mosi = PB5;
 //! cs = PB0
 //!
+//! data_ready = PA0
+//!
 //! USART2 @ 1000000 Baud
 //! ====
 //! Tx = PA2

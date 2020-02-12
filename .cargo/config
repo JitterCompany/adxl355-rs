@@ -1,8 +1,20 @@
+# Specific for stm32g070 nucleo board with onboard stlink
 [target.thumbv6m-none-eabi]
 runner = "./flash.sh 0x08000000"
 rustflags = [
   "-C", "link-arg=-Tlink.x"
 ]
 
+
+# Specific for stm32f103 blackpill board flashed with black magic probe
+[target.thumbv7m-none-eabi]
+runner = "./bmp.sh"
+rustflags = [
+  # LLD (shipped with the Rust toolchain) is used as the default linker
+  "-C", "link-arg=-Tlink.x",
+
+]
+
 [build]
-target = "thumbv6m-none-eabi"
+#target = "thumbv6m-none-eabi"   # Cortex M0+
+target = "thumbv7m-none-eabi"    # Cortex-M3

@@ -24,14 +24,29 @@ panic-halt = "0.2.0"
 nb = "0.1.2"
 
 
-[dev-dependencies.stm32g0xx-hal]
-features = ["stm32g07x", "rt"]
-git = "https://github.com/stm32-rs/stm32g0xx-hal.git"
-rev = "3d190f799af1"
+# Disabled until 0.07 release
+# [dev-dependencies.stm32g0xx-hal]
+# features = ["stm32g07x", "rt"]
+# version = "0.0.7"
+## git = "https://github.com/stm32-rs/stm32g0xx-hal.git"
+## rev = "3d190f799af1"
+
+[dev-dependencies.stm32f1xx-hal]
+features = ["stm32f103", "rt"]
+version = "0.5.3"
+
+# [[example]]
+# name = "stm32g070"
+# required-features = ["stm32g070"]
 
 [[example]]
-name = "stm32g070"
-required-features = ["stm32g070"]
+name = "blackpill"
+required-features = ["stm32f103"]
 
 [features]
 stm32g070 = []
+stm32f103 = []
+
+[profile.dev]
+opt-level = 1
+debug = true

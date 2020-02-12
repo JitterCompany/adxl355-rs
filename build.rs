@@ -5,6 +5,8 @@ fn main() {
 
     let memory_layout = if env::var_os("CARGO_FEATURE_STM32G070").is_some() {
         "stm32g070.x"
+    } else if env::var_os("CARGO_FEATURE_STM32F103").is_some() {
+        "stm32f103.x"
     } else {
         ""
     };

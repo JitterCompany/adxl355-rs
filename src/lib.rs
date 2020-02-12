@@ -65,6 +65,7 @@ pub use accelerometer::{Accelerometer, RawAccelerometer, error, Error, vector::{
 pub use conf::*;
 use register::Register;
 
+use core::convert::Infallible;
 
 const SPI_READ: u8 = 0x01;
 const SPI_WRITE: u8 = 0x00;
@@ -89,7 +90,7 @@ pub struct Adxl355<SPI, CS> {
 impl<SPI, CS, E> Adxl355<SPI, CS>
 where
     SPI: spi::Transfer<u8, Error=E> + spi::Write<u8, Error=E>,
-    CS: OutputPin<Error = ()>,
+    CS: OutputPin<Error = Infallible>,
 {
 
     /// Creates a new [`adxl355`] driver from a SPI peripheral with
@@ -173,7 +174,7 @@ where
 impl<SPI, CS, E> RawAccelerometer<I32x3> for Adxl355<SPI, CS>
 where
     SPI: spi::Transfer<u8, Error=E> + spi::Write<u8, Error=E>,
-    CS: OutputPin<Error = ()>,
+    CS: OutputPin<Error = Infallible>,
     E: Debug
 {
     type Error = E;
@@ -199,7 +200,7 @@ where
 impl<SPI, CS, E> Accelerometer for Adxl355<SPI, CS>
 where
     SPI: spi::Transfer<u8, Error=E> + spi::Write<u8, Error=E>,
-    CS: OutputPin<Error = ()>,
+    CS: OutputPin<Error = Infallible>,
     E: Debug
 {
     type Error = E;
