@@ -65,14 +65,13 @@ pub use accelerometer::{Accelerometer, RawAccelerometer, error, Error, vector::{
 pub use conf::*;
 use register::Register;
 
-use core::convert::Infallible;
-
 const SPI_READ: u8 = 0x01;
 const SPI_WRITE: u8 = 0x00;
 
 const EXPECTED_DEVICE_ID: u8 = 0xED;
 
 const ACCEL_MAX_I20: u32 = 524_287; // = 2^(20-1)-1
+
 
 /// ADXL355 driver
 pub struct Adxl355<SPI, CS> {
@@ -82,16 +81,16 @@ pub struct Adxl355<SPI, CS> {
     // configuration
     odr: ODR_LPF,
     hpf: HPF_CORNER,
-    range: Range
+    range: Range,
 }
 
 
-
-impl<SPI, CS, E> Adxl355<SPI, CS>
+impl<SPI, CS, E, PinError> Adxl355<SPI, CS>
 where
     SPI: spi::Transfer<u8, Error=E> + spi::Write<u8, Error=E>,
-    CS: OutputPin<Error = Infallible>,
+    CS: OutputPin<Error = PinError>
 {
+
 
     /// Creates a new [`adxl355`] driver from a SPI peripheral with
     /// default configuration.
@@ -151,30 +150,30 @@ where
 
     fn write_reg(&mut self, reg: u8, value: u8) {
         let mut bytes = [(reg << 1)  | SPI_WRITE, value];
-        self.cs.set_low().unwrap();
+        self.cs.set_low().ok();
         self.spi.write(&mut bytes).ok();
-        self.cs.set_high().unwrap();
+        self.cs.set_high().ok();
     }
 
     fn read_reg(&mut self, reg: u8, buffer: &mut [u8]) {
         let mut bytes = [(reg << 1)  | SPI_READ, 0];
-        self.cs.set_low().unwrap();
+        self.cs.set_low().ok();
         self.spi.transfer(&mut bytes).ok();
-        self.cs.set_high().unwrap();
+        self.cs.set_high().ok();
         buffer[0] = bytes[1];
     }
 
     fn read(&mut self, bytes: &mut [u8]) {
-        self.cs.set_low().unwrap();
+        self.cs.set_low().ok();
         self.spi.transfer(bytes).ok();
-        self.cs.set_high().unwrap();
+        self.cs.set_high().ok();
     }
 }
 
-impl<SPI, CS, E> RawAccelerometer<I32x3> for Adxl355<SPI, CS>
+impl<SPI, CS, E, EO> RawAccelerometer<I32x3> for Adxl355<SPI, CS>
 where
     SPI: spi::Transfer<u8, Error=E> + spi::Write<u8, Error=E>,
-    CS: OutputPin<Error = Infallible>,
+    CS: OutputPin<Error = EO>,
     E: Debug
 {
     type Error = E;
@@ -197,10 +196,10 @@ where
 
 }
 
-impl<SPI, CS, E> Accelerometer for Adxl355<SPI, CS>
+impl<SPI, CS, E, PinError> Accelerometer for Adxl355<SPI, CS>
 where
     SPI: spi::Transfer<u8, Error=E> + spi::Write<u8, Error=E>,
-    CS: OutputPin<Error = Infallible>,
+    CS: OutputPin<Error = PinError>,
     E: Debug
 {
     type Error = E;
