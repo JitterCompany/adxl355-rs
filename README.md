@@ -1,6 +1,9 @@
 # ADXL355 embedded-hal driver crate
 
+![](https://img.shields.io/crates/v/adxl355.svg)
+![](https://docs.rs/adxl355/badge.svg)
 
+![](images/adxl355-breakout.jpg)
 
 ## Usage
 
@@ -42,6 +45,8 @@ Adxl355::new(spi, cs,
 ## Running the examples
 
 ### Blackpill board (STM32F103)
+
+![](images/adxl355-dev-setup.jpg)
 
 Example based on the stm32f103 microcontroller [`examples/blackpill.rs`]
 

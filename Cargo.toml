@@ -7,10 +7,13 @@ documentation = "https://docs.rs/adxl355"
 keywords = ["embedded-hal-driver", "accelerometer", "MEMS"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/JitterCompany/adxl355-rs"
-version = "0.2.1"
+version = "0.2.2"
 readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package.metadata.docs.rs]
+default-target = "thumbv7m-none-eabi"
 
 [dependencies]
 embedded-hal = "0.2.3"
