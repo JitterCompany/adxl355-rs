@@ -22,7 +22,7 @@
 //! accelerometer.start();
 //!
 //! // to get 3d accerlation data:
-//! let accel = accelerometer.acceleration()?;
+//! let accel = accelerometer.accel_norm()?;
 //! println!("{:?}", accel);
 //!
 //! // One can also use conf module to supply configuration:
