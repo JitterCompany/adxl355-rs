@@ -122,7 +122,6 @@ fn main() -> ! {
 
     accelerometer.start();
 
-    // Wait for the timer to trigger an update and change the state of the LED
     loop {
 
         if drdy.check_interrupt() {
