@@ -1,4 +1,4 @@
-# ADXL355 embedded-hal driver crate
+# ADXL355 embedded-hal SPI driver crate
 
 ![](https://img.shields.io/crates/v/adxl355.svg)
 ![](https://docs.rs/adxl355/badge.svg)

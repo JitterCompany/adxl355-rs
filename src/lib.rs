@@ -1,3 +1,5 @@
+//! ADXL355 embedded-hal SPI driver crate
+//!
 //! A platform agnostic driver to interface with the ADXL355 Accelerometer.
 //! This driver uses SPI via [embedded-hal] and implements the [`Accelerometer` trait][trait]
 //! from the `accelerometer` crate.
@@ -92,7 +94,7 @@ where
 {
 
 
-    /// Creates a new [`adxl355`] driver from a SPI peripheral with
+    /// Creates a new `adxl355` driver from a SPI peripheral with
     /// default configuration.
     pub fn default(spi:SPI, cs:CS) -> Result<Self, E> {
         Adxl355::new(spi, cs, &Config::new())
