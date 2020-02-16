@@ -16,9 +16,9 @@ impl Range {
 impl From<Range> for f32 {
     fn from(range: Range) -> f32 {
         match range {
-            Range::_2G => 2.0,
-            Range::_4G => 4.0,
-            Range::_8G => 8.0,
+            Range::_2G => 2.048,
+            Range::_4G => 4.096,
+            Range::_8G => 8.192,
         }
     }
 }
