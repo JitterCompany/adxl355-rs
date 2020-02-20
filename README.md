@@ -62,7 +62,7 @@ And run immediately. Flashing with black magic probe using `bmp.sh` script (only
 cargo run --example blackpill --features="stm32f103"
 ```
 
-### STM32G070 [DISABLED UNTIL NEXT STM32G0xx-hal UPDATE]
+### STM32G070
 
 Example based on the stm32g070 microcontroller [`examples/stm32g070.rs`]
 

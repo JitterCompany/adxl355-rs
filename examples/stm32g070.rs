@@ -92,7 +92,7 @@ fn main() -> ! {
 
     writeln!(usart, "Start!").unwrap();
 
-    let temp: u16 = accelerometer.read_temp();
+    let temp: u16 = accelerometer.read_temp_raw();
 
     writeln!(usart, "Temp: {}", temp).unwrap();
 

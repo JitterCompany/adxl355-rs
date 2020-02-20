@@ -26,20 +26,17 @@ cortex-m = "0.6.2"
 cortex-m-rt = "0.6.12"
 panic-halt = "0.2.0"
 
-[dev-dependencies.stm32f1xx-hal]
+[target.thumbv7m-none-eabi.dev-dependencies.stm32f1xx-hal]
 features = ["stm32f103", "rt"]
 version = "0.5.3"
 
-# Disabled until 0.07 release
-# [dev-dependencies.stm32g0xx-hal]
-# features = ["stm32g07x", "rt"]
-# version = "0.0.7"
-## git = "https://github.com/stm32-rs/stm32g0xx-hal.git"
-## rev = "3d190f799af1"
+[target.thumbv6m-none-eabi.dev-dependencies.stm32g0xx-hal]
+features = ["stm32g07x", "rt"]
+version = "0.0.7"
 
-# [[example]]
-# name = "stm32g070"
-# required-features = ["stm32g070"]
+[[example]]
+name = "stm32g070"
+required-features = ["stm32g070"]
 
 [[example]]
 name = "blackpill"
